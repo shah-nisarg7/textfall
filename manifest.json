@@ -1,0 +1,7 @@
+{
+    "manifest_version": 3,
+    "name": "Textfall",
+    "version" : "0.1",
+    "description": "Catches what you type in forms so a refresh or crash doesnt wipe it out"
+
+}
