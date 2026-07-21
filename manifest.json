@@ -4,6 +4,9 @@
   "version": "0.1",
   "description": "Catches what you type in forms so a refresh or crash doesnt wipe it out",
 
+
+    "permissions": ["storage"],
+    
   "action": {
     "default_popup": "popup.html"
   },
