@@ -1,0 +1,25 @@
+body {
+  width: 260px;
+  padding: 12px;
+  font-family: Arial, sans-serif;
+  background-color: #fafafa;
+}
+
+h1 {
+  font-size: 16px;
+  margin: 0 0 8px 0;
+}
+
+.empty-msg {
+  font-size: 13px;
+  color: #777;
+  font-style: italic;
+}              
+
+#restore-btn {
+  display: none;
+  margin-top: 10px;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;   
+}
