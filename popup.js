@@ -1,38 +1,67 @@
-// when the popup opens, figure out which tab we're looking at
-// and check if we have a saved draft for it
+// when the popup opens, find every saved draft belonging to the current
+// page (there can be more than one now, one per field)
 
-function getStorageKeyFromUrl(url) {
+function getPageKeyFromUrl(url) {
     const parsed = new URL(url);
     return parsed.origin + parsed.pathname;
 }
 
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     const currentTab = tabs[0];
-    const key = getStorageKeyFromUrl(currentTab.url);
+    const pageKey = getPageKeyFromUrl(currentTab.url);
 
-    chrome.storage.local.get(key, function (result) {
-        const draftText = result[key];
-        const messageEl = document.querySelector(".empty-msg");
-        const restoreBtn = document.querySelector("#restore-btn");
+    // storage doesnt have "get by prefix" directly, so we grab everything
+    // and filter down to keys that start with this page's key
+    chrome.storage.local.get(null, function (allItems) {
+        const container = document.querySelector("#drafts-container");
+        const emptyMsg = document.querySelector(".empty-msg");
 
-        if (draftText && draftText.trim().length > 0) {
-            messageEl.textContent = draftText;
-            // only show the restore button if we actually have something to restore
-            restoreBtn.style.display = "block";
+        const matchingKeys = Object.keys(allItems).filter(function (key) {
+            return key.indexOf(pageKey + "::") === 0;
+        });
+
+        // filter out empty drafts too, same as before
+        const realDrafts = matchingKeys.filter(function (key) {
+            return allItems[key] && allItems[key].trim().length > 0;
+        });
+
+        if (realDrafts.length === 0) {
+            // leaving the default "nothing saved yet" message showing
+            return;
+        }
+
+        // we have at least one real draft, hide the empty message
+        emptyMsg.style.display = "none";
+
+        realDrafts.forEach(function (key) {
+            const fieldId = key.split("::")[1];
+            const draftText = allItems[key];
+
+            // build one little block per draft.. the text + a restore button
+            const draftBlock = document.createElement("div");
+            draftBlock.className = "draft-block";
+
+            const textEl = document.createElement("p");
+            textEl.className = "draft-text";
+            textEl.textContent = draftText;
+
+            const restoreBtn = document.createElement("button");
+            restoreBtn.className = "restore-btn";
+            restoreBtn.textContent = "Restore";
 
             restoreBtn.addEventListener("click", function () {
                 chrome.tabs.sendMessage(
                     currentTab.id,
-                    { type: "RESTORE_DRAFT", text: draftText },
+                    { type: "RESTORE_DRAFT", text: draftText, fieldId: fieldId },
                     function (response) {
-                        // not doing much with the response yet, just logging
-                        // for now so i can see if it worked
                         console.log("restore response:", response);
                     }
                 );
             });
-        }
-        // if nothing saved, leave the "nothing saved yet" text as-is
-        // and the button stays hidden
+
+            draftBlock.appendChild(textEl);
+            draftBlock.appendChild(restoreBtn);
+            container.appendChild(draftBlock);
+        });
     });
 });
