@@ -43,9 +43,16 @@ document.addEventListener("input", function (event) {
         return;
     }
 
-    const key = getStorageKey(field);
+const key = getStorageKey(field);
 
-    chrome.storage.local.set({ [key]: field.value }, function () {
+    // storing an object now instead of a plain string, so we can track
+    // when it was saved (needed for the cleanup alarm in background.js)
+    const draftData = {
+        text: field.value,
+        savedAt: Date.now()
+    };
+
+    chrome.storage.local.set({ [key]: draftData }, function () {
         console.log("textfall saved draft for", key);
     });
 }, true);
