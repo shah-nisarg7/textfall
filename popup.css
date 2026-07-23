@@ -1,48 +1,130 @@
+/* keeping the popup fairly small and clean, no need for anything fancy */
+
 body {
-  width: 260px;
-  padding: 12px;
-  font-family: Arial, sans-serif;
-  background-color: #fafafa;
+  width: 280px;
+  padding: 14px;
+  font-family: -apple-system, Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  /* rounded corners on the popup itself */
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 h1 {
-  font-size: 16px;
-  margin: 0 0 8px 0;
+  font-size: 15px;
+  margin: 0;
+  color: #222;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+h1::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+#draft-count {
+  font-size: 11px;
+  color: #999;
 }
 
 .empty-msg {
-  font-size: 13px;
-  color: #777;
+  font-size: 12px;
+  color: #999;
   font-style: italic;
+  text-align: center;
+  padding: 20px 0;
 }
 
-/* each saved draft gets its own little box, separated visually */
+#drafts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .draft-block {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 6px;
-  margin-bottom: 6px;
-  background-color: white;    
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 8px 10px;
+  background-color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* row holding the field label + delete button, side by side */
+.draft-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.draft-label {
+  font-size: 10.5px;
+  font-weight: bold;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.delete-btn {
+  border: none;
+  background: none;
+  color: #bbb;
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.delete-btn:hover {
+  color: #e53935;
 }
 
 .draft-text {
-  font-size: 12px;
+  font-size: 12.5px;
+  color: #333;
   margin: 0 0 6px 0;
-  /* long drafts shouldnt blow up the popup size */
-  max-height: 60px;      
+  max-height: 60px;
   overflow-y: auto;
   word-wrap: break-word;
-}      
-
-.restore-btn {             
-  font-size: 11px;
-  padding: 4px 8px;      
-  cursor: pointer;
+  line-height: 1.4;
 }
 
 .draft-time {
   display: block;
   font-size: 10px;
-  color: #999;
-  margin-bottom: 6px;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.restore-btn {
+  font-size: 11px;
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.restore-btn:hover {
+  background-color: #43a047;
+}
+
+.restore-btn:active {
+  background-color: #388e3c;
 }

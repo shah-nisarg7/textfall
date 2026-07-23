@@ -5,9 +5,12 @@
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <h1>Textfall</h1>
+  <div class="header">
+    <h1>Textfall</h1>
+    <!-- popup.js fills this in with how many drafts exist on this page -->
+    <span id="draft-count"></span>
+  </div>
   <p class="empty-msg">nothing saved yet</p>
-  <!-- popup.js fills this in with one block per saved draft -->
   <div id="drafts-container"></div>
   <script src="popup.js"></script>
 </body>
